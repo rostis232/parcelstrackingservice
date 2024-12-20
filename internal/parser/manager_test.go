@@ -153,3 +153,119 @@ func TestParsingManager_AddTask1(t *testing.T) {
 	assert.Equal(t, len(tasks), success)
 	assert.Equal(t, noData, 0)
 }
+
+func TestParsingManager_AddTask2(t *testing.T) {
+	tasksForTest := 3
+	timeOut := 30 * time.Second
+
+	parsingManager := parser.New(timeOut, tasksForTest*2)
+
+	var (
+		mu      sync.Mutex
+		success int
+		noData  int
+		wg      sync.WaitGroup
+	)
+
+	wg.Add(tasksForTest)
+
+	for i, task := range tasks {
+		if i >= tasksForTest {
+			break
+		}
+		go func() {
+			data := <-task.OutChannel
+			close(task.OutChannel)
+			if data == nil {
+				fmt.Println("-", task.TrackNumber, "nothing")
+				mu.Lock()
+				noData++
+				mu.Unlock()
+			} else {
+				fmt.Println("+", task.TrackNumber, data.OriginCountry, "->", data.DestinationCountry, "checkpoints:", len(data.Checkpoints))
+				mu.Lock()
+				success++
+				mu.Unlock()
+			}
+			assert.NotNil(t, data)
+			wg.Done()
+		}()
+	}
+
+	startTime := time.Now()
+
+	for i, task := range tasks {
+		if i >= tasksForTest {
+			break
+		}
+		parsingManager.AddTask(task)
+	}
+	wg.Wait()
+
+	endTime := time.Now()
+	fmt.Println(tasksForTest, success, noData)
+	assert.Equal(t, tasksForTest, success)
+	assert.Equal(t, noData, 0)
+
+	diff := endTime.Sub(startTime)
+
+	assert.True(t, diff.Seconds() >= timeOut.Seconds())
+}
+
+func TestParsingManager_AddTask3(t *testing.T) {
+	tasksForTest := 3
+	timeOut := 30 * time.Second
+
+	parsingManager := parser.New(timeOut, tasksForTest)
+
+	var (
+		mu      sync.Mutex
+		success int
+		noData  int
+		wg      sync.WaitGroup
+	)
+
+	wg.Add(tasksForTest)
+
+	for i, task := range tasks {
+		if i >= tasksForTest {
+			break
+		}
+		go func() {
+			data := <-task.OutChannel
+			close(task.OutChannel)
+			if data == nil {
+				fmt.Println("-", task.TrackNumber, "nothing")
+				mu.Lock()
+				noData++
+				mu.Unlock()
+			} else {
+				fmt.Println("+", task.TrackNumber, data.OriginCountry, "->", data.DestinationCountry, "checkpoints:", len(data.Checkpoints))
+				mu.Lock()
+				success++
+				mu.Unlock()
+			}
+			assert.NotNil(t, data)
+			wg.Done()
+		}()
+	}
+
+	startTime := time.Now()
+
+	for i, task := range tasks {
+		if i >= tasksForTest {
+			break
+		}
+		parsingManager.AddTask(task)
+	}
+	wg.Wait()
+
+	endTime := time.Now()
+	fmt.Println(tasksForTest, success, noData)
+	assert.Equal(t, tasksForTest, success)
+	assert.Equal(t, noData, 0)
+
+	diff := endTime.Sub(startTime)
+
+	assert.True(t, diff.Seconds() < timeOut.Seconds())
+}
