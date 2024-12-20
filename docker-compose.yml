@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  prmv:
+    build:
+      context: .
+      dockerfile: trackingservice.dockerfile
+    restart: always
+    ports:
+      - 8181:8181
+    deploy:
+      mode: replicated
+      replicas: 1
