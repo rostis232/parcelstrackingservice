@@ -44,7 +44,7 @@ func ScrapeData(html string) (map[string]*models.Data, error) {
 			text = strings.ReplaceAll(text, "\t", "")
 			text = strings.ReplaceAll(text, "\n", "")
 			data.Checkpoints = append(data.Checkpoints, models.Checkpoint{
-				Date:   date + " " + time,
+				Date:   date + " " + time + ":00",
 				Status: text,
 			})
 		})

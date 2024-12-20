@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 	err := initConfig()
 	if err != nil {
@@ -27,6 +28,7 @@ func main() {
 	}
 
 	a := app.New(&config)
+
 	a.Start()
 }
 
