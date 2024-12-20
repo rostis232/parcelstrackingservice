@@ -6,29 +6,29 @@ Parcel Tracking Service is a Go-based application that allows users to track par
 
 ```
 cmd/
-	api/
-		main.go
+    api/
+        main.go
 config/
-	config.yml
+    config.yml
 internal/
-	handler/
-		handler.go
-	parser/
-		manager_test.go
-		manager.go
-		parser_test.go
-		parser.go
-		scraper_test.go
-		scraper.go
-	pkg/
-		app/
-			app.go
-	routes/
-		routes.go
-	service/
-		service.go
+    handler/
+        handler.go
+    parser/
+        manager_test.go
+        manager.go
+        parser_test.go
+        parser.go
+        scraper_test.go
+        scraper.go
+    pkg/
+        app/
+            app.go
+    routes/
+        routes.go
+    service/
+        service.go
 models/
-	models.go
+    models.go
 go.mod
 go.sum
 trackingservice.dockerfile
@@ -45,11 +45,7 @@ docker-compose.yml
 
 ### Configuration
 
-The application configuration is stored in 
-
-config.yml
-
-:
+The application configuration is stored in config.yml:
 
 ```yml
 port: "8181"
@@ -67,9 +63,7 @@ timeout: "30s"
     docker-compose up --build
     ```
 
-2. The service will be available at 
-
-http://localhost:8181
+2. The service will be available at http://localhost:8181
 
 
 #### Running Locally
